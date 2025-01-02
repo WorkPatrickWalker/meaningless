@@ -9,5 +9,3 @@ public class Main
         window.loop();
     }
 }
-
-// TODO rehehehhehehe

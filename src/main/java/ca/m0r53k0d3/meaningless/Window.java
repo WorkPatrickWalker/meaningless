@@ -80,6 +80,11 @@ public class Window
             throw new IllegalStateException("Failed to create the window :(");
         }
 
+        // Tell GLFW to check for the mouse being pressed, clicked or scrolled with
+        glfwSetCursorPosCallback(window, MouseListener::posCallback);
+        glfwSetMouseButtonCallback(window, MouseListener::buttonCallback);
+        glfwSetScrollCallback(window, MouseListener::scrollCallback);
+
         // Make the window have focus on the desktop
         glfwMakeContextCurrent(window);
 
@@ -109,5 +114,3 @@ public class Window
         }
     }
 }
-
-// TODO rehehehehhe
