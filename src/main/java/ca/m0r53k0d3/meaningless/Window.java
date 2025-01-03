@@ -19,11 +19,16 @@ public class Window
     private float r, g, b;
     private final float a;
 
+    private boolean fadingBg = false;
+
     // The window's singleton instance
     private static Window instance = null;
 
     // The window's location in memory
     private static long window;
+
+    // Make sure you only print out THE NUMBER once
+    public static boolean numberPrinted = false;
 
     private Window()
     {
@@ -80,10 +85,11 @@ public class Window
             throw new IllegalStateException("Failed to create the window :(");
         }
 
-        // Tell GLFW to check for the mouse being pressed, clicked or scrolled with
+        // Tell GLFW to check for the mouse or keyboard being used
         glfwSetCursorPosCallback(window, MouseListener::posCallback);
         glfwSetMouseButtonCallback(window, MouseListener::buttonCallback);
         glfwSetScrollCallback(window, MouseListener::scrollCallback);
+        glfwSetKeyCallback(window, KeyListener::keyCallback);
 
         // Make the window have focus on the desktop
         glfwMakeContextCurrent(window);
@@ -108,6 +114,20 @@ public class Window
             // Set the background color
             glClearColor(this.r, this.g, this.b, this.a);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            // Start fading the background to black when the space bar is clicked
+            if (KeyListener.isPressed(GLFW_KEY_SPACE))
+            {
+                fadingBg = true;
+            }
+
+            // Decrease the rgb values of the background if it should be fading to be black
+            if (fadingBg)
+            {
+                r = Math.max(r - 0.01f, 0);
+                g = Math.max(g - 0.01f, 0);
+                b = Math.max(b - 0.01f, 0);
+            }
 
             // Swap the buffers (?)
             glfwSwapBuffers(window);

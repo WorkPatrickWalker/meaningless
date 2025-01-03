@@ -9,8 +9,8 @@ public class MouseListener
 
     private double x, y, lastX, lastY, scrollX, scrollY;
 
-    // A list of if each standard mouse button is being pressed down or not
-    private final boolean[] buttonPressed = new boolean[3];
+    // A list of if each standard mouse button is being clicked or not
+    private final boolean[] buttonsClicked = new boolean[3];
 
     private boolean isDragging;
 
@@ -37,8 +37,12 @@ public class MouseListener
 
     public static void posCallback(long window, double x, double y)
     {
-        // 'window' arg is never used, but we need it for the callback integration lambda so uh
-        System.out.println("Here's a number!: " + window);
+        // Some args are never used, but the callback integration lambda demands all possible variables so uh print this out but only once
+        if (!Window.numberPrinted)
+        {
+            System.out.println("Here's a number!: " + window);
+            Window.numberPrinted = true;
+        }
 
         // Set the previous mouse position to the current mouse position
         get().lastX = get().x;
@@ -49,24 +53,29 @@ public class MouseListener
         get().y = y;
 
         // Indicate if the mouse is being dragged
-        get().isDragging = get().buttonPressed[0] || get().buttonPressed[1] || get().buttonPressed[2];
+        get().isDragging = get().buttonsClicked[0] || get().buttonsClicked[1] || get().buttonsClicked[2];
     }
 
     public static void buttonCallback(long window, int button, int action, int mods)
     {
-        // 'window' arg is never used, but we need it for the callback integration lambda so uh
-        System.out.println("Here's a number!: " + window);
+        // Some args are never used, but the callback integration lambda demands all possible variables so uh print this out but only once
+        if (!Window.numberPrinted)
+        {
+            System.out.println("Here's a number!: " + (window + mods));
+            Window.numberPrinted = true;
+        }
 
         // Make sure only the standard mouse buttons are checked
-        if (button < get().buttonPressed.length)
+        if (button < get().buttonsClicked.length)
         {
+            // Update the state of if the mouse is being clicked or dragged
             if (action == GLFW_PRESS)
             {
-                get().buttonPressed[button] = true;
+                get().buttonsClicked[button] = true;
             }
             else if (action == GLFW_RELEASE)
             {
-                get().buttonPressed[button] = false;
+                get().buttonsClicked[button] = false;
                 get().isDragging = false;
             }
         }
@@ -74,8 +83,12 @@ public class MouseListener
 
     public static void scrollCallback(long window, double dx, double dy)
     {
-        // 'window' arg is never used, but we need it for the callback integration lambda so uh
-        System.out.println("Here's a number!: " + window);
+        // Some args are never used, but the callback integration lambda demands all possible variables so uh print this out but only once
+        if (!Window.numberPrinted)
+        {
+            System.out.println("Here's a number!: " + window);
+            Window.numberPrinted = true;
+        }
 
         get().scrollX = dx;
         get().scrollY = dy;
@@ -93,14 +106,14 @@ public class MouseListener
 
     public static float getScrollY() {return (float)get().scrollY;}
 
-    public static boolean getIsDragging() {return get().isDragging;}
+    public static boolean isDragging() {return get().isDragging;}
 
-    public static boolean isPressed(int button)
+    public static boolean isClicked(int button)
     {
         // Make sure only the standard button is checked
-        if (button < get().buttonPressed.length)
+        if (button < get().buttonsClicked.length)
         {
-            return get().buttonPressed[button];
+            return get().buttonsClicked[button];
         }
         else
         {
