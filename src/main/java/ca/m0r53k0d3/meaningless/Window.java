@@ -106,6 +106,8 @@ public class Window
 
     public void loop()
     {
+        Time.beginTime = Time.getTime();
+
         while (!glfwWindowShouldClose(window))
         {
             // Look for events that occurred since the last loop
@@ -131,6 +133,11 @@ public class Window
 
             // Swap the buffers (?)
             glfwSwapBuffers(window);
+
+            // Update delta time and reset the beginning time to the ending time
+            Time.endTime = Time.getTime();
+            Time.dt = Time.endTime - Time.beginTime;
+            Time.beginTime = Time.endTime;
         }
     }
 }
